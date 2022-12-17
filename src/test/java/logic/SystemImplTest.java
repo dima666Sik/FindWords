@@ -85,10 +85,17 @@ class SystemImplTest {
             "we",
             "perceive",
     };
+    private static final int COUNT_WORDS_IN_THE_TEXT = 68;
+
+    private final I_System i_system = new SystemImpl();
 
     @Test
     void convertTextIntoArrayString() {
-        I_System i_system = new SystemImpl();
         assertArrayEquals(testRightStringArray, i_system.convertTextIntoArrayString(testText));
+    }
+
+    @Test
+    void countWordsIntoText() {
+        assertEquals(COUNT_WORDS_IN_THE_TEXT, i_system.countWordsIntoText(i_system.convertTextIntoArrayString(testText)));
     }
 }
