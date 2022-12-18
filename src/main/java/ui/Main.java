@@ -3,6 +3,10 @@ package ui;
 import logic.SystemImpl;
 import logic.iface.I_System;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.TreeMap;
+
 public class Main {
     public static void main(String[] args) {
         // this is plug, I mush to replace this.
@@ -13,10 +17,13 @@ public class Main {
                 "If that isn't happiness... then what is?  " +
                 "We are nothingness. " +
                 "Our head is a void.   " +
-                "And without anything around us, we are nothing. We become what we perceive.";
+                "And without anything around us, we are nothing. " +
+                "We become what we perceive.";
 
         I_System i_system = new SystemImpl();
         String[] u = i_system.convertTextIntoArrayString(testText);
-        System.out.println("Count: "+i_system.countWordsIntoText(u));
+        System.out.println("Count: " + i_system.countWordsIntoText(u));
+        TreeMap<BigDecimal, BigDecimal> hashMap = i_system.getIndexStartEndWordsIntoText(testText, "We");
+        hashMap.forEach((k, v) -> System.out.println("indexArray: " + k + " value: " + v));
     }
 }
