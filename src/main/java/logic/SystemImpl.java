@@ -7,6 +7,7 @@ import logic.iface.I_System;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TreeMap;
 
 public class SystemImpl implements I_System {
@@ -37,7 +38,7 @@ public class SystemImpl implements I_System {
     @Override
     public TreeMap<BigDecimal, BigDecimal> getIndexStartEndWordsIntoText(String text, String searchWord) {
         TreeMap<Integer, String> mapStartEndIndexSearchWords = new TreeMap<>();
-        TreeMap<Integer, Integer> mapAllStringsSize = new TreeMap<>();
+        TreeMap<Integer, BigDecimal> mapAllStringsSize = new TreeMap<>();
         try {
             String[] arrayStrings = split(text, '.', '!', '?');
             int counter = 0;
@@ -48,7 +49,7 @@ public class SystemImpl implements I_System {
                     mapStartEndIndexSearchWords.put(counter++, String.valueOf(i).concat("-").concat(String.valueOf(indexStartWord)).concat("-").concat(String.valueOf(indexEndWord)));
                     arrayStrings[i] = arrayStrings[i].substring(indexEndWord + 1);
                 }
-                mapAllStringsSize.put(i, arrayStrings[i].length());
+                mapAllStringsSize.put(i, BigDecimal.valueOf(arrayStrings[i].length()));
             }
         } catch (EmptyValuesExceptions e) {
             e.printStackTrace();
@@ -79,10 +80,37 @@ public class SystemImpl implements I_System {
     }
 
     private TreeMap<BigDecimal, BigDecimal> convertFindIndexIntoNormalState(TreeMap<Integer, String> mapStartEndIndexSearchWords,
-                                                                            TreeMap<Integer, Integer> mapAllStringsSize) {
+                                                                            TreeMap<Integer, BigDecimal> mapAllStringsSize) {
+        mapStartEndIndexSearchWords.forEach((k, v) -> System.out.println(k + " " + v));
+        mapAllStringsSize.forEach((k, v) -> System.out.println(k + " " + v));
         TreeMap<BigDecimal, BigDecimal> convertIndexingIntoTextLand = new TreeMap<>();
+        try {
+            BigDecimal counterAllString = new BigDecimal(0);
+            int counterWithFoundWords = 0, m = 0;
+            for (int i = 0; i < mapAllStringsSize.size(); i++) {
+                System.out.println(counterWithFoundWords);
+                while (i == returnIndexEnum(mapStartEndIndexSearchWords.get(counterWithFoundWords), ConverctIndexEnum.INDEX_FIRST_STATE)) {
+                    if (m == mapStartEndIndexSearchWords.size()) break;
+                    convertIndexingIntoTextLand.put(counterAllString
+                                    .add(BigDecimal.valueOf(returnIndexEnum(mapStartEndIndexSearchWords.get(m), ConverctIndexEnum.START_INDEX_WORD))),
+                            counterAllString
+                                    .add(BigDecimal.valueOf(returnIndexEnum(mapStartEndIndexSearchWords.get(m), ConverctIndexEnum.END_INDEX_WORD)))
+                    );
+                    counterAllString = counterAllString
+                            .add(BigDecimal.valueOf(returnIndexEnum(mapStartEndIndexSearchWords.get(m), ConverctIndexEnum.START_INDEX_WORD)).add(new BigDecimal(2)));
 
-        return null;
+                    if (returnIndexEnum(mapStartEndIndexSearchWords.get(counterWithFoundWords), ConverctIndexEnum.INDEX_FIRST_STATE) !=
+                            returnIndexEnum(mapStartEndIndexSearchWords.get(counterWithFoundWords + 1), ConverctIndexEnum.INDEX_FIRST_STATE) &&
+                            counterWithFoundWords < mapStartEndIndexSearchWords.size())
+                        counterWithFoundWords++;
+                    m++;
+                }
+                counterAllString = counterAllString.add(mapAllStringsSize.get(i));
+            }
+        } catch (EmptyValuesExceptions e) {
+            e.printStackTrace();
+        }
+        return convertIndexingIntoTextLand;
     }
 
     private int returnIndexEnum(String value, ConverctIndexEnum indexEnum) throws EmptyValuesExceptions {
@@ -94,12 +122,39 @@ public class SystemImpl implements I_System {
             case START_INDEX_WORD: {
                 return Integer.parseInt(arrayIndex[1]);
             }
-            case END_INDEX_WORD:{
+            case END_INDEX_WORD: {
                 return Integer.parseInt(arrayIndex[2]);
             }
             default: {
                 throw new EmptyValuesExceptions("You write not found index.");
             }
         }
+    }
+
+    @Override
+    public String getTextWithFoundWords(String text, TreeMap<BigDecimal, BigDecimal> convertIndexingIntoTextLand) {
+        for (Map.Entry<BigDecimal, BigDecimal> item : convertIndexingIntoTextLand.entrySet()) {
+            //plug
+            text = replaceSubstring(text, item.getKey(), item.getValue());
+        }
+        return text;
+    }
+
+    private String replaceSubstring(String text, BigDecimal firstIndex, BigDecimal secondIndex) {
+        String tempTextFirst = text.substring(0, firstIndex.intValue());
+        String tempTextSecond = text.substring(firstIndex.intValue()
+                + (secondIndex.intValue() - firstIndex.intValue() + 1));
+        return tempTextFirst + getWord(text, firstIndex, secondIndex) + tempTextSecond;
+    }
+
+    private String getWord(String text, BigDecimal firstIndex, BigDecimal secondIndex) {
+        String word = "";
+        for (int i = 0; i < text.length(); i++) {
+            if (i >= firstIndex.intValue() & i <= secondIndex.intValue()) {
+//                word += text.charAt(i);
+                word += "|";
+            }
+        }
+        return word;
     }
 }
