@@ -4,6 +4,11 @@ import logic.enums.ConverctIndexEnum;
 import logic.exceptions.EmptyValuesExceptions;
 import logic.iface.I_System;
 
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
+import java.awt.*;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -78,19 +83,15 @@ public class SystemImpl implements I_System {
 
     private TreeMap<BigDecimal, BigDecimal> convertFindIndexIntoNormalState(TreeMap<Integer, String> mapStartEndIndexSearchWords,
                                                                             TreeMap<Integer, BigDecimal> mapAllStringsSize) {
-        mapStartEndIndexSearchWords.forEach((k, v) -> System.out.println(k + " " + v));
-        mapAllStringsSize.forEach((k, v) -> System.out.println(k + " " + v));
         TreeMap<BigDecimal, BigDecimal> convertIndexingIntoTextLand = new TreeMap<>();
         try {
             TreeMap<Integer, Integer> indexArrayTextCount = getIndexCount(mapStartEndIndexSearchWords);
-            indexArrayTextCount.forEach((k, v) -> System.out.println("k=" + k + " v=" + v));
             BigDecimal counterAllString = new BigDecimal(0);
             int counterWithFoundWords = 0,
                     counterRepeatWordInStr = 0;
             Set<Map.Entry<Integer, Integer>> item = indexArrayTextCount.entrySet();
 
             for (int i = 0; i < mapAllStringsSize.size(); i++) {
-                System.out.println(counterWithFoundWords);
                 while (counterWithFoundWords != mapStartEndIndexSearchWords.size() &&
                         i == returnIndexEnum(mapStartEndIndexSearchWords.get(counterWithFoundWords), ConverctIndexEnum.INDEX_FIRST_STATE) &&
                         counterRepeatWordInStr < getValue(item, i)) {
@@ -132,8 +133,8 @@ public class SystemImpl implements I_System {
         int counter = 1;
         for (int i = 0; i < mapStartEndIndexSearchWords.size(); i++) {
             if (i == mapStartEndIndexSearchWords.size() - 1) {
-                    indexArrayTextCount.put(returnIndexEnum(mapStartEndIndexSearchWords.get(i), ConverctIndexEnum.INDEX_FIRST_STATE),
-                            counter);
+                indexArrayTextCount.put(returnIndexEnum(mapStartEndIndexSearchWords.get(i), ConverctIndexEnum.INDEX_FIRST_STATE),
+                        counter);
                 break;
             }
             if (returnIndexEnum(mapStartEndIndexSearchWords.get(i), ConverctIndexEnum.INDEX_FIRST_STATE) ==
@@ -164,32 +165,5 @@ public class SystemImpl implements I_System {
                 throw new EmptyValuesExceptions("You write not found index.");
             }
         }
-    }
-
-    @Override
-    public String getTextWithFoundWords(String text, TreeMap<BigDecimal, BigDecimal> convertIndexingIntoTextLand) {
-        for (Map.Entry<BigDecimal, BigDecimal> item : convertIndexingIntoTextLand.entrySet()) {
-            //plug
-            text = replaceSubstring(text, item.getKey(), item.getValue());
-        }
-        return text;
-    }
-
-    private String replaceSubstring(String text, BigDecimal firstIndex, BigDecimal secondIndex) {
-        String tempTextFirst = text.substring(0, firstIndex.intValue());
-        String tempTextSecond = text.substring(firstIndex.intValue()
-                + (secondIndex.intValue() - firstIndex.intValue() + 1));
-        return tempTextFirst + getWord(text, firstIndex, secondIndex) + tempTextSecond;
-    }
-
-    private String getWord(String text, BigDecimal firstIndex, BigDecimal secondIndex) {
-        String word = "";
-        for (int i = 0; i < text.length(); i++) {
-            if (i >= firstIndex.intValue() & i <= secondIndex.intValue()) {
-//                word += text.charAt(i);
-                word += "F";
-            }
-        }
-        return word;
     }
 }
