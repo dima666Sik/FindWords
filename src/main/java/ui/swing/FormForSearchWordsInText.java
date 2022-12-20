@@ -1,18 +1,21 @@
 package ui.swing;
 
 import logic.SystemImpl;
+import logic.iface.I_ColorFindWords;
 import logic.iface.I_System;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.TreeMap;
 
-public class FormForSearchWordsInText extends JDialog {
+public class FormForSearchWordsInText extends JDialog implements I_ColorFindWords {
     private JTextField textFieldSearcher;
     private JTextArea textArea;
     private JPanel searcherPanel;
@@ -53,10 +56,9 @@ public class FormForSearchWordsInText extends JDialog {
 
     private void searchYourWordInText() {
         I_System i_system = new SystemImpl();
-        String oldText = textArea.getText();
-        TreeMap<BigDecimal, BigDecimal> hashMap = i_system.getIndexStartEndWordsIntoText(oldText, textFieldSearcher.getText());
-        clearText();
-        textArea.setText(i_system.getTextWithFoundWords(oldText, hashMap));
+        JTextArea oldText = new JTextArea(textArea.getText());
+        TreeMap<BigDecimal, BigDecimal> hashMap = i_system.getIndexStartEndWordsIntoText(oldText.getText(), textFieldSearcher.getText());
+        getTextWithFoundWords(hashMap);
     }
 
     private void getCountWordsIntoText() {
@@ -64,7 +66,15 @@ public class FormForSearchWordsInText extends JDialog {
         textFieldCounterAllWords.setText(String.valueOf(i_system.countWordsIntoText(i_system.convertTextIntoArrayString(textArea.getText()))));
     }
 
-    private void clearText() {
-        textArea.setText("");
+    @Override
+    public void getTextWithFoundWords(TreeMap<BigDecimal, BigDecimal> convertIndexingIntoTextLand) {
+        Highlighter.HighlightPainter cyanPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.cyan);
+        for (Map.Entry<BigDecimal, BigDecimal> item : convertIndexingIntoTextLand.entrySet()) {
+            try {
+                textArea.getHighlighter().addHighlight(item.getKey().intValue(), item.getValue().intValue() + 1, cyanPainter);
+            } catch (BadLocationException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }

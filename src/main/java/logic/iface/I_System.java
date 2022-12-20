@@ -1,5 +1,6 @@
 package logic.iface;
 
+import javax.swing.*;
 import java.math.BigDecimal;
 import java.util.TreeMap;
 
@@ -8,5 +9,4 @@ public interface I_System {
     long countWordsIntoText(String[] words);
     int countSymbolsIntoText(String text, Character... symbol);
     TreeMap<BigDecimal, BigDecimal> getIndexStartEndWordsIntoText(String text, String searchWord);
-    String getTextWithFoundWords(String text, TreeMap<BigDecimal, BigDecimal> convertIndexingIntoTextLand);
 }
