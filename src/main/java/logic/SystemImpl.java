@@ -4,11 +4,6 @@ import logic.enums.ConverctIndexEnum;
 import logic.exceptions.EmptyValuesExceptions;
 import logic.iface.I_System;
 
-import javax.swing.*;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter;
-import java.awt.*;
 import java.math.BigDecimal;
 import java.util.*;
 
