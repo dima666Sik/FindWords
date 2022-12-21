@@ -1,6 +1,5 @@
 package logic.iface;
 
-import javax.swing.*;
 import java.math.BigDecimal;
 import java.util.TreeMap;
 
