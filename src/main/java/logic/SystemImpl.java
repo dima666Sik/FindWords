@@ -51,7 +51,7 @@ public class SystemImpl implements I_System {
         } catch (EmptyValuesExceptions e) {
             e.printStackTrace();
         }
-        return convertFindIndexIntoNormalState(mapStartEndIndexSearchWords, mapAllStringsSize);
+        return convertFindIndexIntoNormalState(mapStartEndIndexSearchWords, mapAllStringsSize, searchWord.length());
     }
 
     private int indexOfEnd(String text, String searchWord) {
@@ -77,7 +77,8 @@ public class SystemImpl implements I_System {
     }
 
     private TreeMap<BigDecimal, BigDecimal> convertFindIndexIntoNormalState(TreeMap<Integer, String> mapStartEndIndexSearchWords,
-                                                                            TreeMap<Integer, BigDecimal> mapAllStringsSize) {
+                                                                            TreeMap<Integer, BigDecimal> mapAllStringsSize,
+                                                                            int sizeSearchWord) {
         TreeMap<BigDecimal, BigDecimal> convertIndexingIntoTextLand = new TreeMap<>();
         try {
             TreeMap<Integer, Integer> indexArrayTextCount = getIndexCount(mapStartEndIndexSearchWords);
@@ -98,7 +99,7 @@ public class SystemImpl implements I_System {
                     );
 
                     counterAllString = counterAllString
-                            .add(BigDecimal.valueOf(returnIndexEnum(mapStartEndIndexSearchWords.get(counterWithFoundWords), ConverctIndexEnum.START_INDEX_WORD)).add(new BigDecimal(2)));
+                            .add(BigDecimal.valueOf(returnIndexEnum(mapStartEndIndexSearchWords.get(counterWithFoundWords), ConverctIndexEnum.START_INDEX_WORD)).add(new BigDecimal(sizeSearchWord)));
 
                     counterRepeatWordInStr++;
                     counterWithFoundWords++;
