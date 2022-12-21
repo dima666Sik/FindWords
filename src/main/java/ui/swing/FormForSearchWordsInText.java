@@ -22,6 +22,7 @@ public class FormForSearchWordsInText extends JDialog implements I_ColorFindWord
     private JButton searchButton;
     private JTextField textFieldCounterAllWords;
     private JLabel label_back;
+    private String saveOriginalText;
 
     public FormForSearchWordsInText() {
         setContentPane(searcherPanel);
@@ -46,11 +47,17 @@ public class FormForSearchWordsInText extends JDialog implements I_ColorFindWord
         setVisible(true);
     }
 
+    private void saveOriginalText(String saveOriginalText){
+        this.saveOriginalText = saveOriginalText;
+    }
+
     private void readYourText() {
         if (!textFieldSearcher.getText().isEmpty() && !textArea.getText().isEmpty()) {
+            saveOriginalText(textArea.getText());
+            textArea.setText(saveOriginalText);
             getCountWordsIntoText();
             searchYourWordInText();
-        } else
+        }else
             JOptionPane.showMessageDialog(this, "You not enter text or word if you want to search!\nPlease enter missing values... ", "Warning!", JOptionPane.WARNING_MESSAGE);
     }
 
