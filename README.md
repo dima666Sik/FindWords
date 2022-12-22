@@ -22,10 +22,9 @@ Here are the steps for you to follow:
 - This project will be searching word in strings that have in the end this symbols: ., ?, !. (, - this symbol does not count).
 
 ## Features
-☑️Converts text to an array of words;
-<br>☑️Counts the number of words from the text;
-<br>☑️Search for the number of certain characters;
-<br>☑️Search for indices of search words from the text.
+☑️Search for the number of words in a text;
+<br>☑️Search for a word in a text;
+<br>☑️The ability to add text to the application.
 
 ## Testing Program
 ### _Main Menu_
