@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="searcherPanel" layout-manager="GridLayoutManager" row-count="3" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="5" left="5" bottom="5" right="5"/>
     <constraints>
-      <xy x="20" y="20" width="1263" height="400"/>
+      <xy x="20" y="20" width="1331" height="400"/>
     </constraints>
     <properties>
       <background color="-10572613"/>
@@ -131,7 +131,7 @@
             <properties>
               <background color="-14718021"/>
               <font name="Castellar" size="16"/>
-              <text value="Button"/>
+              <text value="Start Reading"/>
             </properties>
           </component>
         </children>

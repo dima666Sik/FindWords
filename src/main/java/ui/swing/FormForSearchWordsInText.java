@@ -30,7 +30,7 @@ public class FormForSearchWordsInText extends JDialog implements I_ColorFindWord
 
     public FormForSearchWordsInText() {
         setContentPane(searcherPanel);
-        setMinimumSize(new Dimension(1200, 400));
+        setMinimumSize(new Dimension(1280, 400));
         setUndecorated(true);
         setModal(true);
         setLocationRelativeTo(null);
