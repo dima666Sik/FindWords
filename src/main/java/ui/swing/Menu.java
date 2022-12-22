@@ -7,7 +7,6 @@ import java.awt.event.MouseEvent;
 
 public class Menu extends JDialog{
     private JButton buttonFindWordsInSwing;
-    private JButton buttonFindWordsInBrowser;
     private JPanel menuPanel;
     private JLabel exitFromApp;
 
@@ -21,10 +20,6 @@ public class Menu extends JDialog{
         setAlwaysOnTop(true);
         buttonFindWordsInSwing.addActionListener(e -> {
             findWordsInTextWithTheHelp();
-        });
-
-        buttonFindWordsInBrowser.addActionListener(e -> {
-
         });
 
         exitFromApp.addMouseListener(new MouseAdapter() {

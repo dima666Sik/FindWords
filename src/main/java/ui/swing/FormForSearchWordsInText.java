@@ -3,6 +3,7 @@ package ui.swing;
 import logic.SystemImpl;
 import logic.iface.I_ColorFindWords;
 import logic.iface.I_System;
+import logic.speech.TextToSpeech;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -13,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 public class FormForSearchWordsInText extends JDialog implements I_ColorFindWords {
@@ -22,11 +24,13 @@ public class FormForSearchWordsInText extends JDialog implements I_ColorFindWord
     private JButton searchButton;
     private JTextField textFieldCounterAllWords;
     private JLabel label_back;
+    private JComboBox comboBoxVoice;
+    private JButton buttonStartSpeech;
     private String saveOriginalText;
 
     public FormForSearchWordsInText() {
         setContentPane(searcherPanel);
-        setMinimumSize(new Dimension(1000, 400));
+        setMinimumSize(new Dimension(1280, 400));
         setUndecorated(true);
         setModal(true);
         setLocationRelativeTo(null);
@@ -44,10 +48,21 @@ public class FormForSearchWordsInText extends JDialog implements I_ColorFindWord
         searchButton.addActionListener(e -> {
             readYourText();
         });
+        buttonStartSpeech.addActionListener(e -> {
+            convertTextToSpeech(Objects.requireNonNull(comboBoxVoice.getSelectedItem()).toString(), textArea.getSelectedText());
+        });
         setVisible(true);
     }
 
-    private void saveOriginalText(String saveOriginalText){
+    private void convertTextToSpeech(String selectedItem, String selectedText) {
+        if (selectedItem!=null || !selectedText.isEmpty()) {
+            TextToSpeech.textToSpeech(selectedItem, selectedText);
+        } else
+            JOptionPane.showMessageDialog(this, "You not selected text please, select part or all text in the app.", "Warning!", JOptionPane.WARNING_MESSAGE);
+
+    }
+
+    private void saveOriginalText(String saveOriginalText) {
         this.saveOriginalText = saveOriginalText;
     }
 
@@ -57,7 +72,7 @@ public class FormForSearchWordsInText extends JDialog implements I_ColorFindWord
             textArea.setText(saveOriginalText);
             getCountWordsIntoText();
             searchYourWordInText();
-        }else
+        } else
             JOptionPane.showMessageDialog(this, "You not enter text or word if you want to search!\nPlease enter missing values... ", "Warning!", JOptionPane.WARNING_MESSAGE);
     }
 
